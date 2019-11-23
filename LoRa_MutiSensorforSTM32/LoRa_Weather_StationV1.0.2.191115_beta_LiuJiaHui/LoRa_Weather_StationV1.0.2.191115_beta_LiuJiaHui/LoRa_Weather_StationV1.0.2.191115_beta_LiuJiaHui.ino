@@ -68,8 +68,8 @@ void setup()
 
 	//初始化定时器2
 	Timer2.setChannel1Mode(TIMER_OUTPUTCOMPARE);
-	Timer2.setPeriod(1000000); // in microseconds，1S
-	Timer2.setCompare1(1);   // overflow might be small
+	Timer2.setPeriod(1000000); // in microseconds，1S。以微秒为单位,1 s
+	Timer2.setCompare1(1);   // overflow might be small。溢出可能很小
 	Timer2.attachCompare1Interrupt(Time2_Handler);
 
 	//RS485模块开始采集传感器数据
@@ -81,15 +81,20 @@ void setup()
 // Add the main program code into the continuous loop() function
 void loop()
 {
-	if (Get_Bat_Voltage(DEFAULT_VOL_CHANGE_TIMES) < MIN_BAT_VOL)
-		SYS_Sleep();
+	//if (Get_Bat_Voltage(DEFAULT_VOL_CHANGE_TIMES) < MIN_BAT_VOL)
+	//	SYS_Sleep();
 
 	LED3_ON;
 	Send_Air_Muti_Sensor_Data_to_Server();
 
+	//RS485模块开始采集传感器数据
+	CollectDataFlag = true;
+	Data_Acquisition();
+	CollectDataFlag = false;
+
 	//初始化RTC闹钟
-	Init_RTC(60); //休眠60S
-	SYS_Sleep();
+	//Init_RTC(60); //休眠60S
+	//SYS_Sleep();
 }
 
 /*
